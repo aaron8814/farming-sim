@@ -3,6 +3,8 @@
 
 
     export let character: ICharacter;
+    
+    export let reverse = false;
 </script>
 
 

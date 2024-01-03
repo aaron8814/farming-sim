@@ -67,12 +67,15 @@
 </script>
 
 <div class="flex">
-    farming simulator
-    <div class="player1 player">
+    
+   
+    <div class="player1 player battler-reverse">
         {#each player1 as character}
-       <Character {character}></Character>
+       <Character {character} reverse></Character>
         {/each}
     </div>
+
+    <button class="btn btn-susscse" on:click={start}> start </button>
 
     <div class="player2 player">
         {#each player2 as character}
@@ -80,7 +83,7 @@
         {/each}
     </div>
     <div class="flex justify-around">
-        <button class="btn btn-susscse" on:click={start}> start </button>
+       
     </div>
 </div>
 
@@ -88,8 +91,10 @@
 <style>
     .player {
         display: flex;
-        justify-content: space-between;
-        width: 640px;
+        justify-content: flex-start;
+        gap: 20px;
+        width: 1200px;
+        margin: 0 auto;
     }
     .player1 {
         margin-right: 20px;
@@ -97,6 +102,10 @@
 
     .player2 {
         margin-left: 20px;
+    }
+
+    .battler-reverse {
+        flex-direction: row-reverse;
     }
 
 
