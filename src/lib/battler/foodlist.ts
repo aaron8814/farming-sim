@@ -1,7 +1,7 @@
-import type { ICharacter } from "./character";
+import type { ICharacter, IConsumable } from "./character";
 
 
-export const ITEMS: ICharacter[] = [
+export const ITEMS: IConsumable[] = [
     {
         name: 'banana',
         attack: 0,

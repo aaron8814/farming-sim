@@ -4,7 +4,7 @@ import type { ICharacter } from "./character";
 const player = writable<ICharacter[]>([]);
 
 export function getPlayer() {
-    const { subscribe, update } = player
+    const { subscribe, update, set } = player
 
     return {
         add: (pet: ICharacter) => update(state => [...state, pet]),
@@ -14,5 +14,6 @@ export function getPlayer() {
 
 
         subscribe,
+        set,
     }
 }

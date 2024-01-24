@@ -7,7 +7,11 @@
 </script>
 
 <div class="character bg-neutral text-neutral-content rounded-md">
-    {character.name}
+    <img
+        src={"./ai/" + character.name + ".png"}
+        alt={character.name}
+        class:reverse
+    />
     <div class="attack absolute">{character.attack}</div>
     <div class="health absolute">{character.health}</div>
 </div>
@@ -30,5 +34,13 @@
     .health {
         bottom: 0;
         right: 0;
+    }
+
+    img {
+        height: 100px;
+        width: 100px;
+    }
+    .reverse {
+        transform: scaleX(-1);
     }
 </style>

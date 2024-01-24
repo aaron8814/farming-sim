@@ -3,17 +3,15 @@
     import Character from "$lib/battler/character.svelte";
     import Shop from "$lib/battler/shop.svelte";
     import { getPlayer } from "$lib/battler/player";
+    import { getRandomPets } from "$lib/battler/petlist";
 
     let player1 = getPlayer();
-
-    player1.add({ attack: 5, health: 10, name: "dog", id: "1" });
-    player1.add({ attack: 6, health: 9, name: "bat", id: "3" });
-    player1.add({ attack: 5, health: 10, name: "cat", id: "2" });
-
     let player2: ICharacter[] = [
-        { name: "cat", attack: 5, health: 10 },
-        { name: "cat", attack: 5, health: 10 },
-        { name: "cat", attack: 5, health: 10 },
+        getRandomPets(),
+        getRandomPets(),
+        getRandomPets(),
+        getRandomPets(),
+        getRandomPets(),
     ];
 
     function takeTurns() {
