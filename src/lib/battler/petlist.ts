@@ -1,5 +1,5 @@
 import type { ICharacter } from "./character";
-
+import { v4 } from "uuid";
 
 
 export const PETS: ICharacter[] = [
@@ -33,5 +33,8 @@ export function getRandomPets() {
         Math.random() * PETS.length
     );
 
-    return PETS[randomNumber]
+    return {
+        ...PETS[randomNumber],
+        id: 'id' + v4(),
+    }
 }

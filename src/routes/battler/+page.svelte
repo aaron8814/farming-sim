@@ -15,27 +15,39 @@
     ];
 
     function takeTurns() {
-        $player1 = attack($player1, player2, 0);
-        player2 = attack(player2, $player1, 0);
+        const [attacker] = cleanUp(player2);
+        const [defender] = cleanUp($player1);
+        $player1 = attack($player1, attacker, defender);
+        player2 = attack(player2, defender, attacker);
 
-        $player1 = cleanUp($player1);
-        player2 = cleanUp(player2);
+        // $player1 = cleanUp($player1);
+        //player2 = cleanUp(player2);
     }
 
-    function attack(p1: ICharacter[], p2: ICharacter[], index = 0) {
-        let [attacker] = p2;
-
+    function attack(
+        p1: ICharacter[],
+        attacker: ICharacter,
+        defender: ICharacter,
+    ) {
         return p1.map((character, i) => {
-            if (index === i) {
-                character.health -= attacker.attack;
+            if (defender.id === character.id) {
+                character.damage += attacker.attack;
+                character.act = true;
             }
 
             return character;
         });
     }
 
+    function stopAction(p1: ICharacter[]) {
+        return p1.map((character) => {
+            character.act = false;
+            return character;
+        });
+    }
+
     function cleanUp(p1: ICharacter[]) {
-        return p1.filter((character) => character.health > 0);
+        return p1.filter((character) => character.health > character.damage);
     }
 
     let interval = 0;
@@ -43,32 +55,50 @@
 
     function start() {
         if (!inProgress) {
+            $player1 = resetDamage($player1);
+            player2 = resetDamage(player2);
+
             interval = setInterval(() => {
+                $player1 = stopAction($player1);
+                player2 = stopAction(player2);
                 takeTurns();
+                setTimeout(() => {}, 1400);
             }, 1500);
         }
 
         inProgress = true;
     }
+
+    function resetDamage(list: ICharacter[]) {
+        return list.map((character) => {
+            character.damage = 0;
+            return character;
+        });
+    }
 </script>
 
 <div class="flex">
     <div class="player1 player battler-reverse">
-        {#each $player1 as character}
+        {#each cleanUp($player1) as character}
             <Character {character} reverse></Character>
         {/each}
     </div>
-
-    <button class="btn btn-susscse" on:click={start}> start </button>
+    {#if !inProgress}
+        <!-- content here -->
+        <button class="btn btn-susscse" on:click={start}> start </button>
+    {/if}
 
     <div class="player2 player">
-        {#each player2 as character}
+        {#each cleanUp(player2) as character}
             <Character {character}></Character>
         {/each}
     </div>
     <div class="flex justify-around"></div>
 </div>
-<Shop></Shop>
+{#if !inProgress}
+    <!-- content here -->
+    <Shop></Shop>
+{/if}
 
 <style>
     .player {
