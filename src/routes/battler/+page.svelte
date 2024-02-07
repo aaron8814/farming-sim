@@ -2,52 +2,44 @@
     import type { ICharacter } from "$lib/battler/character";
     import Character from "$lib/battler/character.svelte";
     import Shop from "$lib/battler/shop.svelte";
-    import { getPlayer } from "$lib/battler/player";
+    import { enemy, getPlayer, player } from "$lib/battler/player";
     import { getRandomPets } from "$lib/battler/petlist";
+    import { createWallet } from "$lib/battler/money";
 
-    let player1 = getPlayer();
-    let player2: ICharacter[] = [
-        getRandomPets(),
-        getRandomPets(),
-        getRandomPets(),
-        getRandomPets(),
-        getRandomPets(),
-    ];
+    let player1 = getPlayer(player);
+    let player2 = getPlayer(enemy);
+
+    player2.add(getRandomPets());
+    player2.add(getRandomPets());
+    player2.add(getRandomPets());
+    player2.add(getRandomPets());
+    player2.add(getRandomPets());
+
+    let wallet = createWallet();
+
+    $: player1Alive = $player1.filter((char) => !char.dead);
+    $: player2Alive = $player2.filter((char) => !char.dead);
 
     function takeTurns() {
-        const [attacker] = cleanUp(player2);
-        const [defender] = cleanUp($player1);
-        $player1 = attack($player1, attacker, defender);
-        player2 = attack(player2, defender, attacker);
+        const player1Attacker = $player1.find(
+            (char) => !char.dead,
+        ) as ICharacter;
 
-        // $player1 = cleanUp($player1);
-        //player2 = cleanUp(player2);
-    }
+        const player2Attacker = $player1.find(
+            (char) => !char.dead,
+        ) as ICharacter;
 
-    function attack(
-        p1: ICharacter[],
-        attacker: ICharacter,
-        defender: ICharacter,
-    ) {
-        return p1.map((character, i) => {
-            if (defender.id === character.id) {
-                character.damage += attacker.attack;
-                character.act = true;
-            }
+        if (!player1Attacker || !player2Attacker) {
+            inProgress = !inProgress;
+            clearInterval(interval);
+            player1.resetDamage();
+            player2.resetDamage();
 
-            return character;
-        });
-    }
-
-    function stopAction(p1: ICharacter[]) {
-        return p1.map((character) => {
-            character.act = false;
-            return character;
-        });
-    }
-
-    function cleanUp(p1: ICharacter[]) {
-        return p1.filter((character) => character.health > character.damage);
+            wallet.sell(15, 1);
+            return;
+        }
+        player1.attacked(player2Attacker, player1Attacker);
+        player2.attacked(player2Attacker, player1Attacker);
     }
 
     let interval = 0;
@@ -55,14 +47,14 @@
 
     function start() {
         if (!inProgress) {
-            $player1 = resetDamage($player1);
-            player2 = resetDamage(player2);
-
             interval = setInterval(() => {
-                $player1 = stopAction($player1);
-                player2 = stopAction(player2);
                 takeTurns();
-                setTimeout(() => {}, 1400);
+                setTimeout(() => {
+                    player1.stopAction();
+                    player2.stopAction();
+                    player1.cleanup();
+                    player1.cleanup();
+                }, 1400);
             }, 1500);
         }
 
@@ -79,7 +71,7 @@
 
 <div class="flex">
     <div class="player1 player battler-reverse">
-        {#each cleanUp($player1) as character}
+        {#each player1Alive as character}
             <Character {character} reverse></Character>
         {/each}
     </div>
@@ -89,7 +81,7 @@
     {/if}
 
     <div class="player2 player">
-        {#each cleanUp(player2) as character}
+        {#each player2Alive as character}
             <Character {character}></Character>
         {/each}
     </div>

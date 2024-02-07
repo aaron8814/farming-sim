@@ -5,6 +5,7 @@ export interface ICharacter {
     health: number;
     damage: number;
 
+    dead?: boolean;
     act?: boolean;
     price?: number;
     id?: string;

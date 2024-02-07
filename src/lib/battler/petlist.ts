@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 
 export const PETS: ICharacter[] = [
     { damage: 0, name: "bat familiar", attack: 5, health: 10, price: 10 },
-    { damage: 0, name: "blueb", attack: 5, health: 10, price: 10 },
+    { damage: 0, name: "blueb", attack: 6, health: 30, price: 10 },
     { damage: 0, name: "crabboid", attack: 5, health: 10, price: 10 },
     { damage: 0, name: "crow", attack: 5, health: 10, price: 10 },
     { damage: 0, name: "dragon", attack: 5, health: 10, price: 10 },
