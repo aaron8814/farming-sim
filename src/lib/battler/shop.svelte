@@ -60,7 +60,7 @@
 {/each}
 
 <h2>Pet Shop</h2>
-<h3>wallet</h3>
+<h3>Wallet: ${$wallet}</h3>
 
 <div class="flex gap-4">
     {#each pets as pet}

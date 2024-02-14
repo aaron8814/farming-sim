@@ -25,7 +25,7 @@
             (char) => !char.dead,
         ) as ICharacter;
 
-        const player2Attacker = $player1.find(
+        const player2Attacker = $player2.find(
             (char) => !char.dead,
         ) as ICharacter;
 
@@ -39,7 +39,7 @@
             return;
         }
         player1.attacked(player2Attacker, player1Attacker);
-        player2.attacked(player2Attacker, player1Attacker);
+        player2.attacked(player1Attacker, player2Attacker);
     }
 
     let interval = 0;
@@ -53,7 +53,7 @@
                     player1.stopAction();
                     player2.stopAction();
                     player1.cleanup();
-                    player1.cleanup();
+                    player2.cleanup();
                 }, 1400);
             }, 1500);
         }
